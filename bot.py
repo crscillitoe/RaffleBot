@@ -14,8 +14,6 @@ from db import DB
 
 discord.utils.setup_logging(level=logging.INFO, root=True)
 
-GUILD_ID = int(Config.CONFIG["Discord"]["GuildID"])
-
 
 class RaffleBot(Client):
     def __init__(self):
@@ -31,10 +29,6 @@ class RaffleBot(Client):
 
     async def on_ready(self):
         logging.info(f"Logged in as {self.user} (ID: {self.user.id})")
-        # guild = discord.Object(id=GUILD_ID)
-        # tree.clear_commands(guild=guild)
-        # tree.copy_global_to(guild=guild)
-        # await tree.sync(guild=guild)
 
 
 client = RaffleBot()
