@@ -3,3 +3,6 @@ __pycache__
 .DS_Store
 *.ini
 .vscode/
+
+synced_servers/*
+!synced_servers/example.yaml

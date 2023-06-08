@@ -8,6 +8,7 @@ from discord import (
     Intents,
 )
 from commands.mod_commands import ModCommands
+from commands.role_sync import RoleSyncCommands
 from config import Config
 from db import DB
 
@@ -45,6 +46,7 @@ async def on_guild_join(guild):
 async def main():
     async with client:
         tree.add_command(ModCommands(tree, client))
+        tree.add_command(RoleSyncCommands(tree, client))
         await client.start(Config.CONFIG["Discord"]["Token"])
 
 

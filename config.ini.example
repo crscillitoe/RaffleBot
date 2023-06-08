@@ -1,6 +1,7 @@
 
 [Discord]
 Token =
+SyncServerID = 
 
 [MySQL]
 Username =

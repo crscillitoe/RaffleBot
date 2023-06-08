@@ -1,0 +1,11 @@
+creator_name: Brad
+server_id: <Creator's Discord Server ID>
+roles:
+    # Highly recommended to comment what each role ID represents
+  - sourceServerRole: <RoleID in Creator's Discord>
+    # For ease of maintenance
+    destServerRole: <RoleID in Destination Discord>
+    # Highly recommended to comment what each role ID represents
+  - sourceServerRole: <RoleID in Creator's Discord>
+    # For ease of maintenance
+    destServerRole: <RoleID in Destination Discord>
