@@ -6,6 +6,8 @@ from config import Config
 import yaml
 import logging
 
+from controllers.role_sync_controller import RoleSyncController
+
 SYNC_SERVER_ID = int(Config.CONFIG["Discord"]["SyncServerID"])
 CONFIG_DIR = "synced_servers"
 LOG = logging.getLogger(__name__)
@@ -37,29 +39,19 @@ class RoleSyncCommands(app_commands.Group, name="role_sync"):
                 f"Failed to read configuration for {creator_name}"
             )
 
-        creator_server = config["server_id"]
+        source_server_id = config["server_id"]
         roles = config["roles"]
+
+        # Must completely process cleanups first in case
+        # we must reapply a role based on a different config
         for role_config in roles:
-            source_role_id = int(role_config["sourceServerRole"])
-            dest_role_id = int(role_config["destServerRole"])
+            await RoleSyncController.cleanup_role_config(
+                self.client, source_server_id, SYNC_SERVER_ID, role_config
+            )
 
-            source_guild = await self.client.fetch_guild(creator_server)
-            source_guild_members = source_guild.fetch_members(limit=None)
+        for role_config in roles:
+            await RoleSyncController.apply_role_config(
+                self.client, source_server_id, SYNC_SERVER_ID, role_config
+            )
 
-            dest_guild = await self.client.fetch_guild(SYNC_SERVER_ID)
-            dest_server_role = dest_guild.get_role(dest_role_id)
-
-            async for member in source_guild_members:
-                # Only assign to users that have the configured source role
-                if discord.utils.get(member.roles, id=source_role_id) is None:
-                    continue
-                dest_member = await dest_guild.fetch_member(member.id)
-                if dest_member is None:
-                    LOG.warn(f"Could not find member with id {member.id}")
-                    continue
-                # Do not reassign a role that the user already has - this is slow
-                if discord.utils.get(dest_member.roles, id=dest_role_id) is not None:
-                    LOG.debug(f"Role already assigned! Continuing...")
-                    continue
-                await dest_member.add_roles(dest_server_role)
         await interaction.response.send_message(f"Sync complete!")

@@ -3,6 +3,7 @@ import asyncio
 import logging
 import discord
 from discord import (
+    Member,
     app_commands,
     Client,
     Intents,
@@ -30,6 +31,11 @@ class RaffleBot(Client):
 
     async def on_ready(self):
         logging.info(f"Logged in as {self.user} (ID: {self.user.id})")
+
+    """ TODO: Implement on_member_update hooks
+    async def on_member_update(self, before: Member, after: Member):
+        pass
+    """
 
 
 client = RaffleBot()
