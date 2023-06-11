@@ -11,6 +11,7 @@ from discord import (
 from commands.mod_commands import ModCommands
 from commands.role_sync import RoleSyncCommands
 from config import Config
+from controllers.role_sync_controller import RoleSyncController
 from db import DB
 
 
@@ -31,11 +32,7 @@ class RaffleBot(Client):
 
     async def on_ready(self):
         logging.info(f"Logged in as {self.user} (ID: {self.user.id})")
-
-    """ TODO: Implement on_member_update hooks
-    async def on_member_update(self, before: Member, after: Member):
-        pass
-    """
+        RoleSyncController(self).sync_all_creators.start()
 
 
 client = RaffleBot()
