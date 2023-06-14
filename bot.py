@@ -32,7 +32,9 @@ class RaffleBot(Client):
 
     async def on_ready(self):
         logging.info(f"Logged in as {self.user} (ID: {self.user.id})")
-        RoleSyncController(self).sync_all_creators.start()
+        if Config.CONFIG["Discord"]["AutoSyncEnabled"].lower() == "true":
+            logging.info("Starting role auto sync...")
+            RoleSyncController(self).sync_all_creators.start()
 
 
 client = RaffleBot()
