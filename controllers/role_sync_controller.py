@@ -65,6 +65,8 @@ class RoleSyncController:
                 )
                 return
             await dest_member.remove_roles(dest_role)
+            # Rate limit
+            await asyncio.sleep(1)
         except NotFound:
             LOG.warn(
                 f"Could not find member with id {dest_member.id} in source server during cleanup. Removing destination role..."
