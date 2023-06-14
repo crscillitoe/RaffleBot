@@ -34,6 +34,8 @@ class RoleSyncController:
                 LOG.debug(f"Role already assigned! Continuing...")
                 return
             await dest_member.add_roles(dest_role)
+            # Rate limit
+            await asyncio.sleep(1)
         except NotFound:
             LOG.warn(
                 f"Could not find member with id {source_member.id} to assign role to"
